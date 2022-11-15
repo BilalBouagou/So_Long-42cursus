@@ -6,11 +6,15 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 16:55:46 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 02:18:28 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 17:53:24 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
+
+/*
+** error handeling function for dimensions checking.
+*/
 
 void	ft_dimensions_error_handeling(char **map, t_mapdets dets, int flag)
 {
@@ -37,6 +41,11 @@ void	ft_dimensions_error_handeling(char **map, t_mapdets dets, int flag)
 	}
 }
 
+/*
+** error handeling function for components duplication and
+** unrecognized components.
+*/
+
 void	ft_components_misconfiguration_handeling(char tile)
 {
 	if (tile == 'P')
@@ -55,6 +64,10 @@ void	ft_components_misconfiguration_handeling(char tile)
 		exit(-49);
 	}
 }
+
+/*
+** error handeling function for missing components.
+*/
 
 void	ft_components_error_handeling(t_mapdets dets)
 {

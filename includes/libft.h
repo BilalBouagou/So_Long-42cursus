@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 15:47:11 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/10 19:42:50 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 21:19:31 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		ft_lstsize(t_list *lst);
 void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 t_list	*ft_lstlast(t_list *lst);
-t_list	*ft_lstnew(int x, int y, int distance);
+t_list	*ft_lstnew(int x, int y);
 
 /*
 ** Helper functions from libft.

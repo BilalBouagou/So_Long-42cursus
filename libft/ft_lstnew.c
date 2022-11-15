@@ -6,14 +6,14 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 19:39:13 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/10 17:46:21 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 21:19:20 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
 
-t_list	*ft_lstnew(int x, int y, int distance)
+t_list	*ft_lstnew(int x, int y)
 {
 	t_list	*head;
 
@@ -22,7 +22,6 @@ t_list	*ft_lstnew(int x, int y, int distance)
 		return (NULL);
 	head->x = x;
 	head->y = y;
-	head->distance = distance;
 	head->next = NULL;
 	return (head);
 }

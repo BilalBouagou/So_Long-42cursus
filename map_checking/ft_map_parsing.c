@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 00:56:36 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 02:18:07 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 23:19:15 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 
 #include "../includes/map_checking.h"
 #include "../includes/get_next_line.h"
-#include "../includes/libft.h"
+
+/*
+** getting the map's width.
+*/
 
 int	ft_get_map_width(int fd, t_mapdets *dets)
 {
@@ -46,6 +49,11 @@ int	ft_get_map_width(int fd, t_mapdets *dets)
 	return ((*dets).width);
 }
 
+/*
+** checking the validity of the map's dimensions and storing
+** them in a struct.
+*/
+
 char	**ft_check_dimensions(int fd, t_mapdets *dets)
 {
 	char			**map;
@@ -71,6 +79,10 @@ char	**ft_check_dimensions(int fd, t_mapdets *dets)
 	return (map);
 }
 
+/*
+** checking if the map is trully surrounded by walls.
+*/
+
 int	ft_check_map_walls(char **map, t_mapdets dets)
 {
 	int	x;
@@ -85,6 +97,11 @@ int	ft_check_map_walls(char **map, t_mapdets dets)
 			return (0);
 	return (1);
 }
+
+/*
+** checking the validity of the map's components and storing
+** their coordinates.
+*/
 
 void	ft_check_map_components(char **map, t_mapdets *dets)
 {
@@ -114,6 +131,10 @@ void	ft_check_map_components(char **map, t_mapdets *dets)
 	}
 	ft_components_error_handeling((*dets));
 }
+
+/*
+** map parsing init function.
+*/
 
 char	**ft_parse_map(int fd, char **map, t_mapdets *dets)
 {

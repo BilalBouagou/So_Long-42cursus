@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:49:01 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/13 17:44:29 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 23:19:01 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <unistd.h>
 # include <string.h>
 # include <errno.h>
+# include <stdbool.h>
+# include "libft.h"
 
 /*
 ** width == width of the map;
@@ -47,4 +49,6 @@ void	ft_path_checking(char **map, t_mapdets dets);
 void	ft_init_struct(t_mapdets *dim);
 void	ft_init_checking(void);
 void	ft_dimensions_error_handeling(char **map, t_mapdets dets, int flag);
+int		ft_check_queue(t_list *queue, int x, int y, char **map);
+int		ft_update_queue(t_list **h_targets, t_list **h_strtpos, t_list **queue);
 #endif

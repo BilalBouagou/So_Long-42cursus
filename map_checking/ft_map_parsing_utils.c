@@ -6,11 +6,15 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:47:13 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 02:11:25 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/14 18:01:22 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
+
+/*
+** struct initiator function.
+*/
 
 void	ft_init_struct(t_mapdets *dets)
 {
@@ -23,6 +27,10 @@ void	ft_init_struct(t_mapdets *dets)
 	(*dets).c = NULL;
 	(*dets).n = 0;
 }
+
+/*
+** re-allocating the old dets.c element
+*/
 
 int	**allocate(int **new_coords, t_mapdets dets)
 {
@@ -45,6 +53,10 @@ int	**allocate(int **new_coords, t_mapdets dets)
 	}
 	return (new_coords);
 }
+
+/*
+** storing the new coords of the collectible.
+*/
 
 int	**ft_update_coords(t_mapdets dets, int x, int y, int collectsnum)
 {
