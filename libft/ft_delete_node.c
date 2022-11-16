@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_delete_node.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 19:39:13 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/15 22:07:47 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/11/15 20:19:53 by bbouagou          #+#    #+#             */
+/*   Updated: 2022/11/15 21:45:39 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-t_list	*ft_lstnew(int x, int y)
+void	ft_delete_node(t_list **list)
 {
-	t_list	*head;
+	t_list	*tmp;
 
-	head = (t_list *)malloc(sizeof(t_list));
-	if (head == NULL)
-		return (NULL);
-	head->x = x;
-	head->y = y;
-	head->next = NULL;
-	return (head);
+	if ((*list))
+	{
+		tmp = (*list);
+		(*list) = (*list)->next;
+		free (tmp);
+	}
 }

@@ -6,19 +6,26 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 21:54:24 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/15 03:02:57 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/15 23:32:38 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
 #include "../includes/libft.h"
 
-void	ft_print_error_message(void)
+/*
+** function to check if we reached the target
+*/
+
+int	ft_check_tile(t_list *h_targets, t_list *queue)
 {
-	write(1, "Error\nThere's no valid path in this map.\n", 41);
-	write(1, "The player should be able to collect all the collectibles ", 58);
-	write(1, "and then exit the map.\n", 23);
-	exit(-53);
+	t_list	*last;
+
+	last = ft_lstlast(queue);
+	if (last->x == h_targets->x && last->y == h_targets->y)
+		return (1);
+	else
+		return (0);
 }
 
 /*
@@ -29,45 +36,58 @@ void	ft_print_error_message(void)
 */
 
 /*
-** TODO :
-	check if the tile has a component on it and if so update the targets, the queue and the starting positions
+** how my path finding works is to basically search for a path between
+** the player and a collectible and then from a collectible to another
+** collectible... and from the last collectible to the exit.
+** -------------------------------------------------------------------
+** how this algorithm works (which is somewhat a Breadth-first search)
+** is that it takes the starting position and then it checks the four
+** adjacent tiles (up, down, left, right) and if they satisfy the
+** conditions (which are the tile shouldn't be a wall or the tile
+** shouldn't be already in the queue) they are added to the back
+** of the queue, then it moves to the next element in the queue
+** and repeats the same process.
+** -------------------------------------------------------------------
+** if the target is found 21 is found signaling that the lists should
+** be updated (deleting the first strtpos and target because a path
+** between them has been found), else 1 is returned signaling that
+** the search should be continued (unless there's no next element
+** in the queue which is checked in the main function).
 */
+
+int	ft_check_adjacent_tiles(char **map, t_list **h_targets,
+t_list **queue, t_list **o_queue)
+{
+	if (ft_check_queue((*o_queue), (*queue)->x - 1, (*queue)->y, map))
+	{
+		ft_lstadd_back(&(*o_queue), ft_lstnew((*queue)->x - 1, (*queue)->y));
+		if (ft_check_tile((*h_targets), (*o_queue)))
+			return (21);
+	}
+	if (ft_check_queue((*o_queue), (*queue)->x + 1, (*queue)->y, map))
+	{
+		ft_lstadd_back(&(*o_queue), ft_lstnew((*queue)->x + 1, (*queue)->y));
+		if (ft_check_tile((*h_targets), (*o_queue)))
+			return (21);
+	}
+	if (ft_check_queue((*o_queue), (*queue)->x, (*queue)->y + 1, map))
+	{
+		ft_lstadd_back(&(*o_queue), ft_lstnew((*queue)->x, (*queue)->y + 1));
+		if (ft_check_tile((*h_targets), (*o_queue)))
+			return (21);
+	}
+	if (ft_check_queue((*o_queue), (*queue)->x, (*queue)->y - 1, map))
+	{
+		ft_lstadd_back(&(*o_queue), ft_lstnew((*queue)->x, (*queue)->y - 1));
+		if (ft_check_tile((*h_targets), (*o_queue)))
+			return (21);
+	}
+	return (1);
+}
 
 /*
-** so fucking cursed.
+** storing targets in a list.
 */
-
-int	ft_check_adjacent_tiles(char **map, t_list **h_targets, t_list **h_strtpos, t_list **queue)
-{
-	if (ft_check_queue((*queue), (*queue)->x - 1, (*queue)->y, map))
-	{
-		ft_lstadd_back(&(*queue), ft_lstnew((*queue)->x - 1, (*queue)->y));
-		if (ft_update_queue(&(*h_targets), &(*h_strtpos), &(*queue)))
-			return (42);
-	}
-	if (ft_check_queue((*queue), (*queue)->x + 1, (*queue)->y, map))
-	{
-		ft_lstadd_back(&(*queue), ft_lstnew((*queue)->x + 1, (*queue)->y));
-		if (ft_update_queue(&(*h_targets), &(*h_strtpos), &(*queue)))
-			return (42);
-	}
-	if (ft_check_queue((*queue), (*queue)->x, (*queue)->y + 1, map))
-	{
-		ft_lstadd_back(&(*queue), ft_lstnew((*queue)->x, (*queue)->y + 1));
-		if (ft_update_queue(&(*h_targets), &(*h_strtpos), &(*queue)))
-			return (42);
-	}
-	if (ft_check_queue((*queue), (*queue)->x, (*queue)->y - 1, map))
-	{
-		ft_lstadd_back(&(*queue), ft_lstnew((*queue)->x, (*queue)->y - 1));
-		if (ft_update_queue(&(*h_targets), &(*h_strtpos), &(*queue)))
-			return (42);
-	}
-	if (!(*queue)->next)
-		return (0);
-	else
-		return (1);
-}
 
 t_list	*ft_acquire_targets(t_mapdets dets)
 {
@@ -78,9 +98,14 @@ t_list	*ft_acquire_targets(t_mapdets dets)
 	i = 0;
 	while (++i < dets.n)
 		ft_lstadd_back(&h_targets, ft_lstnew(dets.c[i][0], dets.c[i][1]));
-	ft_lstadd_back(&h_targets, ft_lstnew(dets.exitcoords[0], dets.exitcoords[1]));
+	ft_lstadd_back(&h_targets,
+		ft_lstnew(dets.exitcoords[0], dets.exitcoords[1]));
 	return (h_targets);
 }
+
+/*
+** storing starting positions in a list.
+*/
 
 t_list	*ft_acquire_starting_positions(t_mapdets dets)
 {
@@ -95,9 +120,12 @@ t_list	*ft_acquire_starting_positions(t_mapdets dets)
 }
 
 /*
-** pathfinding algorithm takes an initial starting pos and
-** a target, i need a way to store all my starting poss and
-** targets, and i need to update them. 
+** path finding main function.
+** inits targets list (all of the collectibles and the exit),
+** starting position's list (player & all collectibles) and
+** the queue which starts off as the first element in the
+** strtpos list.
+** (algorithm description above.)
 */
 
 void	ft_path_checking(char **map, t_mapdets dets)
@@ -108,19 +136,23 @@ void	ft_path_checking(char **map, t_mapdets dets)
 	t_list	*queue_index;
 	int		flag;
 
-	h_targets = ft_acquire_targets(dets);
-	h_strtpos = ft_acquire_starting_positions(dets);
-	queue = ft_lstnew(h_strtpos->x, h_strtpos->y);
-	queue_index = queue;
+	queue_index = ft_init_lists(&h_targets, &h_strtpos, &queue, dets);
 	flag = 1;
 	while (flag)
 	{
-		flag = ft_check_adjacent_tiles(map, &h_targets, &h_strtpos, &queue_index);
-		if (!flag)
+		flag = ft_check_adjacent_tiles(map, &h_targets, &queue_index, &queue);
+		if (!queue_index->next)
 			ft_print_error_message();
-		else if (flag == 42)
-			return ;
-		if (queue_index->next != NULL)
+		else if (flag == 21)
+		{
+			if (ft_update_queue(&h_targets, &h_strtpos, &queue))
+			{
+				ft_free_lists(&h_targets, &h_strtpos, &queue);
+				return ;
+			}
+			queue_index = queue;
+		}
+		else
 			queue_index = queue_index->next;
 	}
 }

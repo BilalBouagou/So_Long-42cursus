@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:49:01 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 23:19:01 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/15 22:06:32 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ void	ft_init_checking(void);
 void	ft_dimensions_error_handeling(char **map, t_mapdets dets, int flag);
 int		ft_check_queue(t_list *queue, int x, int y, char **map);
 int		ft_update_queue(t_list **h_targets, t_list **h_strtpos, t_list **queue);
+void	ft_print_error_message(void);
+t_list	*ft_acquire_starting_positions(t_mapdets dets);
+t_list	*ft_acquire_targets(t_mapdets dets);
+t_list	*ft_init_lists(t_list **h_targets, t_list **h_strtpos, t_list **queue,
+			t_mapdets dets);
+void	ft_free_lists(t_list **h_targets, t_list **h_strtpos, t_list **queue);
 #endif
