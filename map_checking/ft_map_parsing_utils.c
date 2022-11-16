@@ -6,14 +6,14 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:47:13 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 18:01:22 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/16 02:15:45 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
 
 /*
-** struct initiator function.
+** struct initiator function
 */
 
 void	ft_init_struct(t_mapdets *dets)

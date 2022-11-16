@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 00:56:36 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 23:19:15 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/16 02:15:49 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "../includes/get_next_line.h"
 
 /*
-** getting the map's width.
+** getting the map's width
 */
 
 int	ft_get_map_width(int fd, t_mapdets *dets)

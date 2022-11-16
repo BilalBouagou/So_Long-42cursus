@@ -6,14 +6,14 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 21:59:43 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/14 18:01:53 by bbouagou         ###   ########.fr       */
+/*   Updated: 2022/11/16 02:15:36 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
 
 /*
-** parsing and pathfinding initiation function.
+** parsing and pathfinding initiation function
 */
 
 void	ft_init_checking(void)
