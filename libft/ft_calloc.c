@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_init_checking.c                                 :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/12 21:59:43 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/16 02:15:36 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/12/02 17:58:38 by bbouagou          #+#    #+#             */
+/*   Updated: 2022/12/02 17:59:50 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/map_checking.h"
+#include "../includes/libft.h"
 
-/*
-** parsing and pathfinding initiation function
-*/
-
-void	ft_init_checking(void)
+void	*ft_calloc(size_t count, size_t size)
 {
-	int			fd;
-	char		**map;
-	t_mapdets	dets;
+	void	*ptr;
 
-	ft_init_struct(&dets);
-	fd = open("maps/map.ber", O_RDONLY);
-	if (fd < 0)
-	{
-		perror("Error\n");
-		exit(-4242);
-	}
-	map = ft_parse_map(fd, map, &dets);
-	close(fd);
-	ft_path_checking(map, dets);
+	if (count == SIZE_MAX || size == SIZE_MAX)
+		return (NULL);
+	ptr = malloc(count * size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, count * size);
+	return (ptr);
 }

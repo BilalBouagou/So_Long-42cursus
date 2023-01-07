@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 15:23:20 by bbouagou          #+#    #+#             */
-/*   Updated: 2023/01/06 16:04:18 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/12/02 18:00:37 by bbouagou          #+#    #+#             */
+/*   Updated: 2022/12/02 18:00:54 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "../includes/libft.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
 
-char	*get_next_line(int fd);
-char	*ft_get_nl(char *s, int c);
-size_t	ft_get_lenght(const char *s);
-char	*push_to_stash(char *stash, char *buff);
-void	copy(char *dst, char *src, size_t len);
-
-#endif
+	i = 0;
+	while (i < n)
+	{
+		*((unsigned char *)s + i) = '\0';
+		i++;
+	}
+}

@@ -6,34 +6,12 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 21:54:24 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/15 23:32:38 by bbouagou         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:16:27 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
 #include "../includes/libft.h"
-
-/*
-** function to check if we reached the target
-*/
-
-int	ft_check_tile(t_list *h_targets, t_list *queue)
-{
-	t_list	*last;
-
-	last = ft_lstlast(queue);
-	if (last->x == h_targets->x && last->y == h_targets->y)
-		return (1);
-	else
-		return (0);
-}
-
-/*
-** up == x - 1;
-** down == x + 1;
-** right == y + 1;
-** left == y - 1;
-*/
 
 /*
 ** how my path finding works is to basically search for a path between
@@ -55,7 +33,7 @@ int	ft_check_tile(t_list *h_targets, t_list *queue)
 ** in the queue which is checked in the main function).
 */
 
-int	ft_check_adjacent_tiles(char **map, t_list **h_targets,
+static int	ft_check_tiles(char **map, t_list **h_targets,
 t_list **queue, t_list **o_queue)
 {
 	if (ft_check_queue((*o_queue), (*queue)->x - 1, (*queue)->y, map))
@@ -89,7 +67,7 @@ t_list **queue, t_list **o_queue)
 ** storing targets in a list.
 */
 
-t_list	*ft_acquire_targets(t_mapdets dets)
+static t_list	*ft_acquire_targets(t_mapdets dets)
 {
 	t_list	*h_targets;
 	int		i;
@@ -99,7 +77,7 @@ t_list	*ft_acquire_targets(t_mapdets dets)
 	while (++i < dets.n)
 		ft_lstadd_back(&h_targets, ft_lstnew(dets.c[i][0], dets.c[i][1]));
 	ft_lstadd_back(&h_targets,
-		ft_lstnew(dets.exitcoords[0], dets.exitcoords[1]));
+		ft_lstnew(dets.playercoords[0], dets.playercoords[1]));
 	return (h_targets);
 }
 
@@ -107,16 +85,29 @@ t_list	*ft_acquire_targets(t_mapdets dets)
 ** storing starting positions in a list.
 */
 
-t_list	*ft_acquire_starting_positions(t_mapdets dets)
+static t_list	*ft_acquire_starting_positions(t_mapdets dets)
 {
 	t_list	*h_strtpos;
 	int		i;
 
-	h_strtpos = ft_lstnew(dets.playercoords[0], dets.playercoords[1]);
+	h_strtpos = ft_lstnew(dets.exitcoords[0], dets.exitcoords[1]);
 	i = -1;
 	while (++i < dets.n)
 		ft_lstadd_back(&h_strtpos, ft_lstnew(dets.c[i][0], dets.c[i][1]));
 	return (h_strtpos);
+}
+
+/*
+** lists init function
+*/
+
+static t_list	*ft_init_lists(t_list **h_targets, t_list **h_strtpos,
+t_list **queue, t_mapdets dets)
+{
+	(*h_targets) = ft_acquire_targets(dets);
+	(*h_strtpos) = ft_acquire_starting_positions(dets);
+	(*queue) = ft_lstnew((*h_strtpos)->x, (*h_strtpos)->y);
+	return ((*queue));
 }
 
 /*
@@ -128,7 +119,7 @@ t_list	*ft_acquire_starting_positions(t_mapdets dets)
 ** (algorithm description above.)
 */
 
-void	ft_path_checking(char **map, t_mapdets dets)
+void	ft_path_checking(t_mapdets dets)
 {
 	t_list	*h_targets;
 	t_list	*h_strtpos;
@@ -140,7 +131,7 @@ void	ft_path_checking(char **map, t_mapdets dets)
 	flag = 1;
 	while (flag)
 	{
-		flag = ft_check_adjacent_tiles(map, &h_targets, &queue_index, &queue);
+		flag = ft_check_tiles(dets.map, &h_targets, &queue_index, &queue);
 		if (!queue_index->next)
 			ft_print_error_message();
 		else if (flag == 21)

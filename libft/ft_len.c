@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_len.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 15:23:20 by bbouagou          #+#    #+#             */
-/*   Updated: 2023/01/06 16:04:18 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/11/10 17:52:34 by bbouagou          #+#    #+#             */
+/*   Updated: 2022/11/21 21:33:53 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "../includes/libft.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
+int	ft_len(const char *s)
+{
+	int	count;
 
-char	*get_next_line(int fd);
-char	*ft_get_nl(char *s, int c);
-size_t	ft_get_lenght(const char *s);
-char	*push_to_stash(char *stash, char *buff);
-void	copy(char *dst, char *src, size_t len);
-
-#endif
+	count = 0;
+	while (s[count])
+		count++;
+	return (count);
+}

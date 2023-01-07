@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 15:23:20 by bbouagou          #+#    #+#             */
-/*   Updated: 2023/01/06 16:04:18 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/12/02 17:56:51 by bbouagou          #+#    #+#             */
+/*   Updated: 2022/12/02 17:59:39 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "../includes/libft.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
 
-char	*get_next_line(int fd);
-char	*ft_get_nl(char *s, int c);
-size_t	ft_get_lenght(const char *s);
-char	*push_to_stash(char *stash, char *buff);
-void	copy(char *dst, char *src, size_t len);
-
-#endif
+	i = 0;
+	while ((i + 1 < dstsize) && src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (i < dstsize)
+		dst[i] = '\0';
+	return (ft_len(src));
+}

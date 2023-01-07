@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_move_enemies.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 15:23:20 by bbouagou          #+#    #+#             */
-/*   Updated: 2023/01/06 16:04:18 by bbouagou         ###   ########.fr       */
+/*   Created: 2022/12/28 17:23:04 by bbouagou          #+#    #+#             */
+/*   Updated: 2023/01/01 15:12:16 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "../includes/map_checking.h"
+#include "../includes/rendering.h"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
-# include <limits.h>
-# include <stdlib.h>
-# include <unistd.h>
+void	ft_move_enemies(t_mapdets *dets)
+{
+	int	i;
 
-char	*get_next_line(int fd);
-char	*ft_get_nl(char *s, int c);
-size_t	ft_get_lenght(const char *s);
-char	*push_to_stash(char *stash, char *buff);
-void	copy(char *dst, char *src, size_t len);
-
-#endif
+	i = 0;
+	while (i < (*dets).cnst_n)
+	{
+		ft_enemy_pos_ctl(&(*dets),
+			&(*dets).enemies[i][1], &(*dets).enemies[i][0]);
+		i++;
+	}
+}

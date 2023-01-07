@@ -6,43 +6,50 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:47:13 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/16 02:15:45 by bbouagou         ###   ########.fr       */
+/*   Updated: 2023/01/06 19:12:52 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/map_checking.h"
 
 /*
-** struct initiator function
+** norminette is a hoe
 */
 
-void	ft_init_struct(t_mapdets *dets)
+void	ft_insert(int arr[][2], int a, int b)
 {
-	(*dets).width = 0;
-	(*dets).lenght = 0;
-	(*dets).playercoords[0] = 0;
-	(*dets).playercoords[1] = 0;
-	(*dets).exitcoords[0] = 0;
-	(*dets).exitcoords[1] = 0;
-	(*dets).c = NULL;
-	(*dets).n = 0;
+	(*arr)[0] = a;
+	(*arr)[1] = b;
 }
 
 /*
 ** re-allocating the old dets.c element
 */
 
-int	**allocate(int **new_coords, t_mapdets dets)
+static void	ft_free_it(t_mapdets *dets, int collectsnum)
+{
+	int	i;
+
+	i = collectsnum - 1;
+	while (i >= 0)
+	{
+		free ((*dets).c[i]);
+		i--;
+	}
+	free ((*dets).c);
+}
+
+static int	**allocate(int **new_coords, int collectsnum)
 {
 	int	i;
 
 	i = -1;
-	new_coords = (int **)malloc(dets.n * sizeof(int *));
+	new_coords = (int **)malloc(collectsnum * sizeof(int *));
 	if (!new_coords)
 		return (NULL);
-	while (++i < dets.n)
+	while (++i < collectsnum)
 	{
-		new_coords[i] = (int *)malloc(2);
+		new_coords[i] = (int *)malloc(2 * sizeof(int));
 		if (!new_coords[i])
 		{
 			while (--i > 0)
@@ -58,23 +65,24 @@ int	**allocate(int **new_coords, t_mapdets dets)
 ** storing the new coords of the collectible.
 */
 
-int	**ft_update_coords(t_mapdets dets, int x, int y, int collectsnum)
+int	**ft_update_coords(t_mapdets *dets, int x, int y, int collectsnum)
 {
 	int	**new_coords;
 	int	i;
 
 	i = -1;
-	new_coords = allocate(new_coords, dets);
+	new_coords = NULL;
+	new_coords = allocate(new_coords, collectsnum + 1);
 	if (!new_coords)
 		return (NULL);
-	while (++i < dets.n - 1)
+	while (++i < collectsnum)
 	{
-		new_coords[i][0] = dets.c[i][0];
-		new_coords[i][1] = dets.c[i][1];
+		new_coords[i][0] = (*dets).c[i][0];
+		new_coords[i][1] = (*dets).c[i][1];
 	}
 	new_coords[i][0] = x;
 	new_coords[i][1] = y;
-	if (dets.c)
-		free (dets.c);
+	if ((*dets).c)
+		ft_free_it(&(*dets), collectsnum);
 	return (new_coords);
 }

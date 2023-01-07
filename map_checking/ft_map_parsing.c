@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 00:56:36 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/16 02:15:49 by bbouagou         ###   ########.fr       */
+/*   Updated: 2023/01/06 19:02:06 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 */
 
 #include "../includes/map_checking.h"
-#include "../includes/get_next_line.h"
 
 /*
-** getting the map's width
+** getting the map's width.
 */
 
-int	ft_get_map_width(int fd, t_mapdets *dets)
+static int	ft_get_map_width(int fd, t_mapdets *dets)
 {
 	char	buffer[11];
 	ssize_t	bytes_read;
@@ -54,46 +53,44 @@ int	ft_get_map_width(int fd, t_mapdets *dets)
 ** them in a struct.
 */
 
-char	**ft_check_dimensions(int fd, t_mapdets *dets)
+static void	ft_check_dimensions(int fd, t_mapdets *dets)
 {
-	char			**map;
 	int				index;
 
 	(*dets).width = ft_get_map_width(fd, &(*dets));
 	if ((*dets).width < 3)
-		ft_dimensions_error_handeling(NULL, (*dets), -42);
-	fd = open("maps/map.ber", O_RDONLY);
+		ft_dimensions_error_handeling((*dets), -42);
+	fd = open((*dets).path, O_RDONLY);
 	index = -1;
-	map = (char **)malloc((*dets).width * sizeof(char *));
-	if (!map)
-		ft_dimensions_error_handeling(NULL, (*dets), -43);
+	(*dets).map = (char **)malloc((*dets).width * sizeof(char *));
+	if (!(*dets).map)
+		ft_dimensions_error_handeling((*dets), -43);
 	while (++index < (*dets).width)
-		map[index] = get_next_line(fd);
-	(*dets).lenght = (int)ft_strlen(map[0]);
-	if ((*dets).width == (int)ft_strlen(map[0]) || ft_strlen(map[0]) < 3)
-		ft_dimensions_error_handeling(map, (*dets), -44);
+		(*dets).map[index] = get_next_line(fd);
+	(*dets).lenght = (int)ft_len((*dets).map[0]);
+	if ((*dets).width == ft_len((*dets).map[0]) || ft_len((*dets).map[0]) < 3)
+		ft_dimensions_error_handeling((*dets), -44);
 	index = -1;
 	while (++index < (*dets).width - 1)
-		if (ft_strlen(map[index]) != ft_strlen(map[index + 1]))
-			ft_dimensions_error_handeling(map, (*dets), -45);
-	return (map);
+		if (ft_len((*dets).map[index]) != ft_len((*dets).map[index + 1]))
+			ft_dimensions_error_handeling((*dets), -45);
 }
 
 /*
 ** checking if the map is trully surrounded by walls.
 */
 
-int	ft_check_map_walls(char **map, t_mapdets dets)
+static int	ft_check_map_walls(t_mapdets dets)
 {
 	int	x;
 
 	x = -1;
 	while (++x < dets.lenght)
-		if (map[0][x] != '1' || map[dets.width - 1][x] != '1')
+		if (dets.map[0][x] != '1' || dets.map[dets.width - 1][x] != '1')
 			return (0);
 	x = -1;
 	while (++x < dets.width)
-		if (map[x][0] != '1' || map[x][dets.lenght - 1] != '1')
+		if (dets.map[x][0] != '1' || dets.map[x][dets.lenght - 1] != '1')
 			return (0);
 	return (1);
 }
@@ -103,7 +100,11 @@ int	ft_check_map_walls(char **map, t_mapdets dets)
 ** their coordinates.
 */
 
-void	ft_check_map_components(char **map, t_mapdets *dets)
+/*
+** NORMINETTE IS A HOE
+*/
+
+static void	ft_check_map_components(t_mapdets *dets)
 {
 	int	i[2];
 
@@ -113,20 +114,16 @@ void	ft_check_map_components(char **map, t_mapdets *dets)
 		i[1] = 0;
 		while (++i[1] < (*dets).lenght - 1)
 		{
-			if (map[i[0]][i[1]] == 'P' && !(*dets).playercoords[0])
-			{
-				(*dets).playercoords[0] = i[0];
-				(*dets).playercoords[1] = i[1];
-			}
-			else if (map[i[0]][i[1]] == 'E' && !(*dets).exitcoords[0])
-			{
-				(*dets).exitcoords[0] = i[0];
-				(*dets).exitcoords[1] = i[1];
-			}
-			else if (map[i[0]][i[1]] == 'C')
-				(*dets).c = ft_update_coords((*dets), i[0], i[1], (*dets).n++);
-			else if (map[i[0]][i[1]] != '0' && map[i[0]][i[1]] != '1')
-				ft_components_misconfiguration_handeling(map[i[0]][i[1]]);
+			if ((*dets).map[i[0]][i[1]] == 'P' && !(*dets).playercoords[0])
+				ft_insert(&(*dets).playercoords, i[0], i[1]);
+			else if ((*dets).map[i[0]][i[1]] == 'E' && !(*dets).exitcoords[0])
+				ft_insert(&(*dets).exitcoords, i[0], i[1]);
+			else if ((*dets).map[i[0]][i[1]] == 'C')
+				(*dets).c = ft_update_coords(&(*dets), i[0], i[1], (*dets).n++);
+			else if ((*dets).map[i[0]][i[1]] != '0'
+					&& (*dets).map[i[0]][i[1]] != '1')
+				ft_components_misconfiguration_handeling(
+					(*dets).map[i[0]][i[1]]);
 		}
 	}
 	ft_components_error_handeling((*dets));
@@ -136,14 +133,16 @@ void	ft_check_map_components(char **map, t_mapdets *dets)
 ** map parsing init function.
 */
 
-char	**ft_parse_map(int fd, char **map, t_mapdets *dets)
+void	ft_parse_map(int fd, t_mapdets *dets)
 {
-	map = ft_check_dimensions(fd, &(*dets));
-	if (!ft_check_map_walls(map, (*dets)))
+	ft_check_dimensions(fd, &(*dets));
+	if (!ft_check_map_walls((*dets)))
 	{
 		write(1, "Error\nIncorrect walls layout.\n", 30);
 		exit (-46);
 	}
-	ft_check_map_components(map, &(*dets));
-	return (map);
+	ft_check_map_components(&(*dets));
+	(*dets).cnst_n = (*dets).n;
+	(*dets).x = (*dets).playercoords[1] * 40;
+	(*dets).y = (*dets).playercoords[0] * 40;
 }

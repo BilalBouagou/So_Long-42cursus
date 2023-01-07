@@ -6,7 +6,7 @@
 /*   By: bbouagou <bbouagou@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 21:52:24 by bbouagou          #+#    #+#             */
-/*   Updated: 2022/11/15 22:06:06 by bbouagou         ###   ########.fr       */
+/*   Updated: 2023/01/06 20:17:01 by bbouagou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ void	ft_print_error_message(void)
 	write(1, "Error\nThere's no valid path in this map.\n", 41);
 	write(1, "The player should be able to collect all the collectibles ", 58);
 	write(1, "and then exit the map.\n", 23);
-	exit(-53);
+	exit(0);
 }
 
 int	ft_check_queue(t_list *queue, int x, int y, char **map)
 {
 	while (queue != NULL)
 	{
-		if ((queue->x == x && queue->y == y) || map[x][y] == '1')
+		if ((queue->x == x && queue->y == y) || map[x][y] == '1'
+			|| map[x][y] == 'E')
 			return (0);
 		queue = queue->next;
 	}
@@ -45,13 +46,19 @@ int	ft_update_queue(t_list **h_targets, t_list **h_strtpos, t_list **queue)
 	return (0);
 }
 
-t_list	*ft_init_lists(t_list **h_targets, t_list **h_strtpos, t_list **queue,
-t_mapdets dets)
+/*
+** function to check if we reached the target
+*/
+
+int	ft_check_tile(t_list *h_targets, t_list *queue)
 {
-	(*h_targets) = ft_acquire_targets(dets);
-	(*h_strtpos) = ft_acquire_starting_positions(dets);
-	(*queue) = ft_lstnew((*h_strtpos)->x, (*h_strtpos)->y);
-	return ((*queue));
+	t_list	*last;
+
+	last = ft_lstlast(queue);
+	if (last->x == h_targets->x && last->y == h_targets->y)
+		return (1);
+	else
+		return (0);
 }
 
 void	ft_free_lists(t_list **h_targets, t_list **h_strtpos, t_list **queue)
